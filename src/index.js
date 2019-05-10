@@ -1,4 +1,4 @@
 import Matrix from './Matrix';
-import Vector from './Vector';
 
-export { Matrix, Vector };
+export { Matrix };
+export default Matrix;
