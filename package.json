@@ -1,6 +1,6 @@
 {
   "name": "tinymatrix",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A minimal matrix and vector math library in JavaScript",
   "main": "dist/index.js",
   "repository": "https://github.com/tireymorris/tinymatrix",
