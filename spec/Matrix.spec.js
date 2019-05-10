@@ -6,11 +6,9 @@ const expectAllValuesToPass = (matrix, expectation) => {
 
 describe('Matrix', () => {
   describe('initializes', () => {
-    test(' uses initial value and rows/columns', () => {
+    test('uses initial value and rows/columns', () => {
       let matrix = new Matrix({ rows: 5, columns: 5 });
-      matrix.values.forEach(row =>
-        row.forEach(value => expect(value).toEqual(0))
-      );
+      expectAllValuesToPass(matrix, value => expect(value).toEqual(0));
 
       matrix = new Matrix({ rows: 2, columns: 2, initialValue: 5 });
       expectAllValuesToPass(matrix, value => expect(value).toEqual(5));
@@ -24,9 +22,10 @@ describe('Matrix', () => {
       const matrixOne = new Matrix({ rows: 3, columns: 3, initialValue: 2 });
       const matrixTwo = new Matrix({ rows: 3, columns: 3, initialValue: 4 });
 
-      matrixOne.add(matrixTwo);
-
-      expectAllValuesToPass(matrixOne, value => expect(value).toEqual(6));
+      expectAllValuesToPass(Matrix.add(matrixOne, matrixTwo), value =>
+        expect(value).toEqual(6)
+      );
+      expectAllValuesToPass(matrixOne, value => expect(value).toEqual(2));
     });
   });
 
@@ -34,9 +33,9 @@ describe('Matrix', () => {
     test('decrements by a scalar', () => {
       const matrixOne = new Matrix({ rows: 3, columns: 3, initialValue: 2 });
 
-      matrixOne.decrement(7);
-
-      expectAllValuesToPass(matrixOne, value => expect(value).toEqual(-5));
+      expectAllValuesToPass(Matrix.decrement(matrixOne, 7), value =>
+        expect(value).toEqual(-5)
+      );
     });
   });
 
@@ -45,9 +44,10 @@ describe('Matrix', () => {
       const matrixOne = new Matrix({ rows: 2, columns: 2, initialValue: 2 });
       const matrixTwo = new Matrix({ rows: 2, columns: 2, initialValue: 2 });
 
-      matrixOne.entrywiseProduct(matrixTwo);
-
-      expectAllValuesToPass(matrixOne, value => expect(value).toEqual(4));
+      expectAllValuesToPass(
+        Matrix.entrywiseProduct(matrixOne, matrixTwo),
+        value => expect(value).toEqual(4)
+      );
     });
   });
 
@@ -55,9 +55,9 @@ describe('Matrix', () => {
     test('increments by a scalar', () => {
       const matrixOne = new Matrix({ rows: 3, columns: 3, initialValue: 2 });
 
-      matrixOne.increment(7);
-
-      expectAllValuesToPass(matrixOne, value => expect(value).toEqual(9));
+      expectAllValuesToPass(Matrix.increment(matrixOne, 7), value =>
+        expect(value).toEqual(9)
+      );
     });
   });
 
@@ -70,9 +70,8 @@ describe('Matrix', () => {
       matrixTwo.values = [[1, 2, 3], [4, 5, 6]];
 
       const expectedResult = [[9, 12, 15]];
-      expect(Matrix.multiply(matrixOne, matrixTwo).values).toEqual(
-        expectedResult
-      );
+      const resultMatrix = Matrix.multiply(matrixOne, matrixTwo);
+      expect(resultMatrix.values).toEqual(expectedResult);
     });
 
     test('correctly multiplies two (slightly more) complex matrices', () => {
@@ -88,9 +87,9 @@ describe('Matrix', () => {
         [7, 8, 9, 3],
         [6, 8, -30, 2]
       ];
-      expect(Matrix.multiply(matrixOne, matrixTwo).values).toEqual(
-        expectedResult
-      );
+
+      const resultMatrix = Matrix.multiply(matrixOne, matrixTwo);
+      expect(resultMatrix.values).toEqual(expectedResult);
     });
   });
 
@@ -98,9 +97,9 @@ describe('Matrix', () => {
     test('generates random values', () => {
       const matrix = new Matrix({ rows: 15, columns: 15 });
 
-      matrix.randomize();
+      const result = Matrix.randomize(matrix);
 
-      expectAllValuesToPass(matrix, value => {
+      expectAllValuesToPass(result, value => {
         expect(value).toBeGreaterThanOrEqual(0);
         expect(value).toBeLessThanOrEqual(9);
       });
@@ -111,7 +110,7 @@ describe('Matrix', () => {
     test('scales matrix according to scalar value', () => {
       let matrix = new Matrix({ rows: 3, columns: 3, initialValue: 9 });
 
-      matrix.scale(3);
+      matrix = Matrix.scale(matrix, 3);
       expectAllValuesToPass(matrix, value => expect(value).toEqual(27));
     });
   });
@@ -121,9 +120,9 @@ describe('Matrix', () => {
       const matrixOne = new Matrix({ rows: 3, columns: 3, initialValue: 2 });
       const matrixTwo = new Matrix({ rows: 3, columns: 3, initialValue: 4 });
 
-      matrixOne.subtract(matrixTwo);
-
-      expectAllValuesToPass(matrixOne, value => expect(value).toEqual(-2));
+      expectAllValuesToPass(Matrix.subtract(matrixOne, matrixTwo), value =>
+        expect(value).toEqual(-2)
+      );
     });
   });
 
@@ -139,15 +138,27 @@ describe('Matrix', () => {
     });
   });
 
-  describe('iterativelyApply', () => {
+  describe('map', () => {
     test('correctly sets values in matrix', () => {
       let matrix = new Matrix({ rows: 3, columns: 3, initialValue: 1 });
 
-      matrix.iterativelyApply(
+      const result = Matrix.map(
+        matrix,
         ([i, j]) => (matrix.values[i][j] = -matrix.values[i][j])
       );
 
-      expectAllValuesToPass(matrix, value => expect(value).toEqual(-1));
+      expectAllValuesToPass(result, value => expect(value).toEqual(-1));
+    });
+
+    test.skip("doesn't mutate original matrix", () => {
+      let matrix = new Matrix({ rows: 3, columns: 3, initialValue: 1 });
+
+      Matrix.map(
+        matrix,
+        ([i, j]) => (matrix.values[i][j] = -9001 * matrix.values[i][j])
+      );
+
+      expectAllValuesToPass(matrix, value => expect(value).toEqual(1));
     });
   });
 });

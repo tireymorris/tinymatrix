@@ -20,32 +20,61 @@ class Matrix {
     }
   }
 
-  add(other) {
-    if (this.rows !== other.rows || this.columns !== other.columns) {
+  static add(matrixOne, matrixTwo) {
+    if (
+      matrixOne.rows !== matrixTwo.rows ||
+      matrixOne.columns !== matrixTwo.columns
+    ) {
       throw new Error('matrices being added must have same dimensions');
-    } else if (!other) {
-      throw new error('matrix cannot be undefined or null');
+    } else if (!matrixOne || !matrixTwo) {
+      throw new Error('matrices cannot be undefined or null');
     }
 
-    this.iterativelyApply(([i, j]) => this.values[i][j] + other.values[i][j]);
+    return Matrix.map(
+      matrixOne,
+      ([i, j]) => matrixOne.values[i][j] + matrixTwo.values[i][j]
+    );
   }
 
-  decrement(dec) {
+  static clone(matrix) {
+    const result = new Matrix({ rows: matrix.rows, columns: matrix.columns });
+    result.values = JSON.parse(JSON.stringify(matrix.values));
+
+    return result;
+  }
+
+  static decrement(matrix, dec) {
     if (typeof dec !== 'number') {
       throw new Error('must decrement by a number');
     }
-    this.iterativelyApply(([i, j]) => this.values[i][j] - dec);
+    return Matrix.map(matrix, ([i, j]) => matrix.values[i][j] - dec);
   }
 
-  entrywiseProduct(other) {
-    this.iterativelyApply(([i, j]) => this.values[i][j] * other.values[i][j]);
+  static entrywiseProduct(matrixOne, matrixTwo) {
+    return Matrix.map(
+      matrixOne,
+      ([i, j]) => matrixOne.values[i][j] * matrixTwo.values[i][j]
+    );
   }
 
-  increment(inc) {
+  static increment(matrix, inc) {
     if (typeof inc !== 'number') {
       throw new Error('must increment by a number');
     }
-    this.iterativelyApply(([i, j]) => this.values[i][j] + inc);
+
+    return Matrix.map(matrix, ([i, j]) => matrix.values[i][j] + inc);
+  }
+
+  static map(matrix, operation) {
+    if (typeof operation !== 'function') {
+      throw new Error('operation must be a function');
+    }
+
+    const result = Matrix.clone(matrix);
+    result.values = result.values.map((row, i) =>
+      row.map((_, j) => operation([i, j], result))
+    );
+    return result;
   }
 
   // Returns a new matrix with the number of rows of matrixOne
@@ -78,11 +107,37 @@ class Matrix {
     return result;
   }
 
-  randomize(ceiling = 10, floor = 0) {
+  static randomize(matrix, ceiling = 10, floor = 0) {
     if (typeof ceiling !== 'number' || typeof floor !== 'number') {
       throw new Error('ceiling and floor must be numbers');
     }
-    this.iterativelyApply(() => Math.floor(Math.random() * ceiling + floor));
+    return Matrix.map(matrix, () =>
+      Math.floor(Math.random() * ceiling + floor)
+    );
+  }
+
+  static scale(matrix, scalar) {
+    if (typeof scalar !== 'number') {
+      throw new Error('scalar must be a number');
+    }
+
+    return Matrix.map(matrix, ([i, j]) => matrix.values[i][j] * scalar);
+  }
+
+  static subtract(matrixOne, matrixTwo) {
+    if (
+      matrixOne.rows !== matrixTwo.rows ||
+      matrixOne.columns !== matrixTwo.columns
+    ) {
+      throw new Error('matrices being added must have same dimensions');
+    } else if (!matrixOne || !matrixTwo) {
+      throw new Error('matrices cannot be undefined or null');
+    }
+
+    return Matrix.map(
+      matrixOne,
+      ([i, j]) => matrixOne.values[i][j] - matrixTwo.values[i][j]
+    );
   }
 
   static transpose(matrix) {
@@ -95,34 +150,6 @@ class Matrix {
     }
 
     return result;
-  }
-
-  subtract(other) {
-    if (this.rows !== other.rows || this.columns !== other.columns) {
-      throw new Error('matrices being subtracted must have same dimensions');
-    } else if (!other) {
-      throw new error('matrix cannot be undefined or null');
-    }
-
-    this.iterativelyApply(([i, j]) => this.values[i][j] - other.values[i][j]);
-  }
-
-  scale(scalar) {
-    if (typeof scalar !== 'number') {
-      throw new Error('scalar must be a number');
-    }
-
-    this.iterativelyApply(([i, j]) => this.values[i][j] * scalar);
-  }
-
-  iterativelyApply(operation) {
-    if (typeof operation !== 'function') {
-      throw new Error('operation must be a function');
-    }
-
-    this.values = this.values.map((row, i) =>
-      row.map((_, j) => operation([i, j]))
-    );
   }
 }
 
