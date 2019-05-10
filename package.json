@@ -1,0 +1,25 @@
+{
+  "name": "tinymatrix",
+  "version": "0.1.0",
+  "description": "A minimal matrix and vector math library in JavaScript",
+  "main": "dist/index.js",
+  "repository": "https://github.com/tireymorris/tinymatrix",
+  "author": "Ty Morris <tireymorris@gmail.com>",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "jest": "^24.8.0"
+  },
+  "scripts": {
+    "build": "babel src -d dist",
+    "install": "babel src -d dist",
+    "test": "yarn jest --no-cache spec/"
+  },
+  "keywords": [
+    "matrix",
+    "vector",
+    "linear algebra"
+  ]
+}
