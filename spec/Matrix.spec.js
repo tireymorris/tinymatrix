@@ -127,6 +127,18 @@ describe('Matrix', () => {
     });
   });
 
+  describe('transpose', () => {
+    test('transposes a matrix', () => {
+      const matrix = new Matrix({ rows: 2, columns: 3 });
+
+      matrix.values = [[1, 2, 3], [4, 5, 6]];
+
+      const transposedMatrix = Matrix.transpose(matrix);
+      expect(transposedMatrix.values).toEqual([[1, 4], [2, 5], [3, 6]]);
+      expect(Matrix.transpose(transposedMatrix).values).toEqual(matrix.values);
+    });
+  });
+
   describe('iterativelyApply', () => {
     test('correctly sets values in matrix', () => {
       let matrix = new Matrix({ rows: 3, columns: 3, initialValue: 1 });

@@ -85,6 +85,18 @@ class Matrix {
     this.iterativelyApply(() => Math.floor(Math.random() * ceiling + floor));
   }
 
+  static transpose(matrix) {
+    const result = new Matrix({ rows: matrix.columns, columns: matrix.rows });
+
+    for (let i = 0; i < result.rows; i++) {
+      for (let j = 0; j < result.columns; j++) {
+        result.values[i][j] = matrix.values[j][i];
+      }
+    }
+
+    return result;
+  }
+
   subtract(other) {
     if (this.rows !== other.rows || this.columns !== other.columns) {
       throw new Error('matrices being subtracted must have same dimensions');
