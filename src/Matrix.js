@@ -20,14 +20,14 @@ class Matrix {
     }
   }
 
-  add(matrix) {
-    if (this.rows !== matrix.rows || this.columns !== matrix.columns) {
+  add(other) {
+    if (this.rows !== other.rows || this.columns !== other.columns) {
       throw new Error('matrices being added must have same dimensions');
-    } else if (!matrix) {
+    } else if (!other) {
       throw new error('matrix cannot be undefined or null');
     }
 
-    this.iterativelyApply(([i, j]) => this.values[i][j] + matrix.values[i][j]);
+    this.iterativelyApply(([i, j]) => this.values[i][j] + other.values[i][j]);
   }
 
   decrement(dec) {
@@ -37,8 +37,8 @@ class Matrix {
     this.iterativelyApply(([i, j]) => this.values[i][j] - dec);
   }
 
-  entrywiseProduct(matrix) {
-    this.iterativelyApply(([i, j]) => this.values[i][j] * matrix.values[i][j]);
+  entrywiseProduct(other) {
+    this.iterativelyApply(([i, j]) => this.values[i][j] * other.values[i][j]);
   }
 
   increment(inc) {
@@ -48,6 +48,36 @@ class Matrix {
     this.iterativelyApply(([i, j]) => this.values[i][j] + inc);
   }
 
+  // Returns a new matrix with the number of rows of matrixOne
+  // And the number of columns of matrixTwo
+  // Uses dot product to calculate result matrix values
+  static multiply(matrixOne, matrixTwo) {
+    if (matrixOne.columns !== matrixTwo.rows) {
+      throw new Error(
+        'matrix one must have the same number of columns as matrix two has rows'
+      );
+    }
+
+    const result = new Matrix({
+      rows: matrixOne.rows,
+      columns: matrixTwo.columns
+    });
+
+    // Calculate dot product of each row of A
+    // and each column of B
+    for (let i = 0; i < result.rows; i++) {
+      for (let j = 0; j < result.columns; j++) {
+        let sum = 0;
+        for (let k = 0; k < matrixOne.columns; k++) {
+          sum += matrixOne.values[i][k] * matrixTwo.values[k][j];
+        }
+        result.values[i][j] = sum;
+      }
+    }
+
+    return result;
+  }
+
   randomize(ceiling = 10, floor = 0) {
     if (typeof ceiling !== 'number' || typeof floor !== 'number') {
       throw new Error('ceiling and floor must be numbers');
@@ -55,14 +85,14 @@ class Matrix {
     this.iterativelyApply(() => Math.floor(Math.random() * ceiling + floor));
   }
 
-  subtract(matrix) {
-    if (this.rows !== matrix.rows || this.columns !== matrix.columns) {
+  subtract(other) {
+    if (this.rows !== other.rows || this.columns !== other.columns) {
       throw new Error('matrices being subtracted must have same dimensions');
-    } else if (!matrix) {
+    } else if (!other) {
       throw new error('matrix cannot be undefined or null');
     }
 
-    this.iterativelyApply(([i, j]) => this.values[i][j] - matrix.values[i][j]);
+    this.iterativelyApply(([i, j]) => this.values[i][j] - other.values[i][j]);
   }
 
   scale(scalar) {

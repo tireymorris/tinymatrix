@@ -61,6 +61,39 @@ describe('Matrix', () => {
     });
   });
 
+  describe('multiply', () => {
+    test('correctly multiplies two simple matrices', () => {
+      const matrixOne = new Matrix({ rows: 1, columns: 2 });
+      const matrixTwo = new Matrix({ rows: 2, columns: 3 });
+
+      matrixOne.values = [[1, 2]];
+      matrixTwo.values = [[1, 2, 3], [4, 5, 6]];
+
+      const expectedResult = [[9, 12, 15]];
+      expect(Matrix.multiply(matrixOne, matrixTwo).values).toEqual(
+        expectedResult
+      );
+    });
+
+    test('correctly multiplies two (slightly more) complex matrices', () => {
+      const matrixOne = new Matrix({ rows: 4, columns: 2 });
+      const matrixTwo = new Matrix({ rows: 2, columns: 4 });
+
+      matrixOne.values = [[-3, 2], [-1, 3], [0, 1], [4, -2]];
+      matrixTwo.values = [[5, 6, -3, 2], [7, 8, 9, 3]];
+
+      const expectedResult = [
+        [-1, -2, 27, 0],
+        [16, 18, 30, 7],
+        [7, 8, 9, 3],
+        [6, 8, -30, 2]
+      ];
+      expect(Matrix.multiply(matrixOne, matrixTwo).values).toEqual(
+        expectedResult
+      );
+    });
+  });
+
   describe('randomize', () => {
     test('generates random values', () => {
       const matrix = new Matrix({ rows: 15, columns: 15 });
