@@ -121,13 +121,11 @@ class Matrix {
     return result;
   }
 
-  static randomize(matrix, ceiling = 10, floor = 0) {
+  static randomize(matrix, ceiling = 2, floor = -1) {
     if (typeof ceiling !== 'number' || typeof floor !== 'number') {
       throw new Error('ceiling and floor must be numbers');
     }
-    return Matrix.map(matrix, () =>
-      Math.floor(Math.random() * ceiling + floor)
-    );
+    return Matrix.map(matrix, () => Math.random() * ceiling + floor);
   }
 
   static scale(matrix, scalar) {

@@ -108,8 +108,8 @@ describe('Matrix', () => {
       const result = Matrix.randomize(matrix);
 
       expectAllValuesToPass(result, value => {
-        expect(value).toBeGreaterThanOrEqual(0);
-        expect(value).toBeLessThanOrEqual(9);
+        expect(value).toBeGreaterThanOrEqual(-1);
+        expect(value).toBeLessThanOrEqual(1);
       });
     });
   });
