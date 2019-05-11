@@ -146,6 +146,15 @@ describe('Matrix', () => {
     });
   });
 
+  describe('toArray', () => {
+    test('converts 1 column matrix / vector to array', () => {
+      const matrix = new Matrix({ rows: 3, columns: 1 });
+      matrix.values = [[1], [2], [3]];
+
+      expect(Matrix.toArray(matrix)).toEqual([1, 2, 3]);
+    });
+  });
+
   describe('map', () => {
     test('correctly sets values in matrix', () => {
       let matrix = new Matrix({ rows: 3, columns: 3, initialValue: 1 });

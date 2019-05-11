@@ -154,6 +154,19 @@ class Matrix {
     );
   }
 
+  static toArray(matrix) {
+    if (!matrix instanceof Matrix) {
+      throw new Error('toArray input must be a matrix');
+    }
+
+    const result = [];
+    for (let i = 0; i < matrix.rows; i++) {
+      result.push(matrix.values[i][0]);
+    }
+
+    return result;
+  }
+
   static transpose(matrix) {
     const result = new Matrix({ rows: matrix.columns, columns: matrix.rows });
 
