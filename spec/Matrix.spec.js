@@ -51,6 +51,14 @@ describe('Matrix', () => {
     });
   });
 
+  describe('fromArray', () => {
+    test('converts array to 1 column matrix / vector', () => {
+      const arrayVector = [1, 2, 3];
+      const vector = Matrix.fromArray(arrayVector);
+      expect(vector.values).toEqual([[1], [2], [3]]);
+    });
+  });
+
   describe('increment', () => {
     test('increments by a scalar', () => {
       const matrixOne = new Matrix({ rows: 3, columns: 3, initialValue: 2 });

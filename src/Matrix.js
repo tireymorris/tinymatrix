@@ -57,6 +57,20 @@ class Matrix {
     );
   }
 
+  static fromArray(array) {
+    if (!array instanceof Array) {
+      throw new Error('fromArray input must be an array');
+    }
+
+    // convert array to vector
+    const matrix = new Matrix({ rows: array.length, columns: 1 });
+    for (let i = 0; i < array.length; i++) {
+      matrix.values[i][0] = array[i];
+    }
+
+    return matrix;
+  }
+
   static increment(matrix, inc) {
     if (typeof inc !== 'number') {
       throw new Error('must increment by a number');
